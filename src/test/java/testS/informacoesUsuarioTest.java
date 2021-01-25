@@ -2,10 +2,8 @@ package testS;
 
 import static org.junit.Assert.*;
 
-import org.junit.After;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.*;
+import org.junit.rules.TestName;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -14,12 +12,15 @@ import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import suporte.Generator;
+import suporte.Screenshot;
 
 import java.util.concurrent.TimeUnit;
 
 public class informacoesUsuarioTest {
     private WebDriver navegador;
-
+@Rule
+public TestName teste = new TestName();
     @Before
     public void setUP() {
         //Abrindo o navegador
@@ -68,13 +69,15 @@ public class informacoesUsuarioTest {
     @Test
     public void removerUmContatoDeUmUsuario() {
         //Clicar no elemento pelo seu xpath //spain[text{}="+55113627406"]/following-sibling::a
-        navegador.findElement(By.xpath("//span[contains(text(),\"+55113627406\")]/following-sibling::a")).click();
+        navegador.findElement(By.xpath("//span[contains(text(),\"55113627409\")]/following-sibling::a")).click();
         //Confirmar a janela javascript
         navegador.switchTo().alert().accept();
         //Validar que a mensagem apresentada foi Rest in peace, dear phone!
         WebElement mensagemPop = navegador.findElement(By.id("toast-container"));
         String mensagem = mensagemPop.getText();
         assertEquals("Rest in peace, dear phone!", mensagem);
+        String screenshotArquivo = "C:\\Users\\Bruna\\IdeaProjects\\Bruna\\Screenshots" + Generator.dataHoraParaArquivo() + teste.getMethodName()+".png";
+        Screenshot.tirar(navegador,screenshotArquivo);
         // Aguardar ate 10 segundos para que a janela desapareca
         WebDriverWait aguardar = new WebDriverWait(navegador,10);
         aguardar.until(ExpectedConditions.stalenessOf(mensagemPop));
